@@ -27,7 +27,7 @@ def linux_task():
         instructions=[
             script(
                 "install",
-                "apt-get instal -y git",
+                "apt-get install -y git",
                 "python -m pip install -U pip setuptools setuptools-scm"
             ),
             github_deep_clone(),
