@@ -9,6 +9,11 @@ VERSIONS = {
 }
 
 def main():
+    print("CIRRUS_PR", environ.get("CIRRUS_PR"))
+    print("CIRRUS_REPO_CLONE_TOKEN exists", "CIRRUS_REPO_CLONE_TOKEN" in environ)
+    print("CIRRUS_REPO_FULL_NAME", environ.get("CIRRUS_REPO_FULL_NAME"))
+    print("CIRRUS_CHANGE_IN_REPO", environ.get("CIRRUS_CHANGE_IN_REPO"))
+    print("CIRRUS_WORKING_DIR", environ.get("CIRRUS_WORKING_DIR"))
     return [
         linux_task(),
         windows_task()
