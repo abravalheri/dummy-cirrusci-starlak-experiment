@@ -53,7 +53,7 @@ def windows_task():
             script(
                 "install",
                 "python -m ensurepip",
-                "python -m pip install -U --user pip certifi setup setuptools-scm"
+                "python -m pip install -U --user pip certifi setuptools setuptools-scm"
             ),
             _test_script()
         ]
