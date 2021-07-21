@@ -41,7 +41,7 @@ def windows_task():
         name="Windows (windowsservercore 2019)",
         instance={
             "windows_container": {
-                "image": "python:%s-buster" % VERSIONS["python"],
+                "image": "python:%s-windowsservercore" % VERSIONS["python"],
                 "os_version": 2019,
             }
         },
