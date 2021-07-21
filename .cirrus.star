@@ -49,7 +49,7 @@ def windows_task():
         instructions=[
             _install_windows_tools()
         ] + _windows_workarounds() + [
-            github_deep_clone(),
+            github_deep_clone(os="windows"),
             script(
                 "install",
                 "python -m ensurepip",
