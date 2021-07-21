@@ -72,7 +72,7 @@ def _install_windows_tools():
         name="tools",
         folder=r"C:\tools",
         fingerprint_script=[
-            {"ps": "echo " + environ["CIRRUS_OS"] + " - nuget %(nuget)s - git %(git)s" % VERSIONS}
+            {"ps": "echo %%CIRRUS_OS%% - nuget %(nuget)s - git %(git)s" % VERSIONS}
         ],
         populate_script=[
             {"ps": r"(mkdir 'C:\tools')"},
