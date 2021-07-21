@@ -6,4 +6,4 @@ version = get_version(
     version_scheme="no-guess-dev"
 )
 
-print("Repository Version:", version)
+print("Repository Version from git:", version)
