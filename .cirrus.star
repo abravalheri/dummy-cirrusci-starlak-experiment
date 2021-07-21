@@ -1,5 +1,5 @@
 load("cirrus", environ="env")
-load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@1c0317d",
+load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@e02ea96",
      "task", "container", "script", "github_deep_clone", "cache")
 
 VERSIONS = {
