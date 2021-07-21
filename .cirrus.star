@@ -25,10 +25,11 @@ def linux_task():
         name="Linux - Debian (buster)",
         instance=container("python:%s-buster" % VERSIONS["python"]),
         instructions=[
-            script("install", [
+            script(
+                "install",
                 "apt-get instal -y git",
                 "python -m pip install -U pip setuptools setuptools-scm"
-            ]),
+            ),
             github_deep_clone(),
             _test_script(),
         ]
@@ -49,21 +50,23 @@ def windows_task():
             _install_windows_tools()
         ] + _windows_workarounds() + [
             github_deep_clone(),
-            script("install", [
+            script(
+                "install",
                 "python -m ensurepip",
                 "python -m pip install -U --user pip certifi setup setuptools-scm"
-            ]),
+            ),
             _test_script()
         ]
     )
 
 
 def _test_script():
-    return script("test", [
+    return script(
+        "test",
         "git config --global user.email 'ci@cirrus'",
         "git config --global user.name 'CI Automation'",
         "python simple-test.py"
-    ])
+    )
 
 
 def _install_windows_tools():
@@ -105,13 +108,15 @@ def _windows_env():
 
 def _windows_workarounds():
     return [
-        script("long_paths_workaround", [
+        script(
+            "long_paths_workaround",
             # Activate long file paths to avoid some errors
             "git config --system core.longpaths true",
             r"REG ADD HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f",
-        ]),
-        script("encoding_workaround", [
+        ),
+        script(
+            "encoding_workaround",
             # Set Windows encoding to UTF-8
             r'REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v Autorun /t REG_SZ /d "@chcp 65001>nul" /f'
-        ])
+        )
     ]
