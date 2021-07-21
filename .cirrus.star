@@ -85,9 +85,9 @@ def _install_windows_tools():
 def _windows_env():
     return {
         "PYTHON_HOME": r"C:\Python",
-        "PYTHON_APPDATA": r"%APPDATA%\Python\Python%s" % VERSIONS["python"],
+        "PYTHON_APPDATA": r"%%APPDATA%%\Python\Python%s" % VERSIONS["python"],
         "GIT_HOME": r"C:\tools\GitForWindows.%s\tools" % VERSIONS["git"],
-        "HOME": "%USERPROFILE",
+        "HOME": "%USERPROFILE%",
         "USERNAME": "ContainerAdministrator",
         "PATH": r"%HOME%\.local\bin\;"
                 + r"%PYTHON_APPDATA%\Scripts\;"
