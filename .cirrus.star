@@ -46,11 +46,13 @@ def windows_task():
         },
         env=_windows_env(),
         instructions=[
-            _install_windows_tools(),
+            _install_windows_tools()
         ] + _windows_workarounds() + [
             github_deep_clone(),
-            "python -m ensurepip",
-            "python -m pip install -U --user pip certifi setup setuptools-scm",
+            script("install", [
+                "python -m ensurepip",
+                "python -m pip install -U --user pip certifi setup setuptools-scm"
+            ]),
             _test_script()
         ]
     )
