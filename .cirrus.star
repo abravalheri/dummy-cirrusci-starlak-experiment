@@ -1,6 +1,6 @@
 load("cirrus", environ="env")
 load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@31ee799",
-     "task", "container", "script", "github_deep_clone", "cache")
+     "task", "container", "script", "deep_clone_script", "cache")
 
 VERSIONS = {
     "nuget": "v5.10.0",
@@ -30,7 +30,7 @@ def linux_task():
                 "apt-get install -y git",
                 "python -m pip install -U pip setuptools setuptools-scm"
             ),
-            github_deep_clone(),
+            deep_clone_script(),
             _test_script(),
         ]
     )
@@ -49,7 +49,7 @@ def windows_task():
         instructions=[
             _install_windows_tools()
         ] + _windows_workarounds() + [
-            github_deep_clone(os="windows"),
+            deep_clone_script(os="windows"),
             script(
                 "install",
                 "python -m ensurepip",
