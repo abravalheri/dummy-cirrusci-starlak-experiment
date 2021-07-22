@@ -1,6 +1,6 @@
 load("cirrus", environ="env")
-load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@31ee799",
-     "task", "container", "script", "deep_clone_script", "cache")
+load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@92a8b49",
+     "task", "container", "script", "use_deep_clone", "cache")
 
 VERSIONS = {
     "nuget": "v5.10.0",
@@ -15,8 +15,8 @@ def main():
     print("CIRRUS_CHANGE_IN_REPO", environ.get("CIRRUS_CHANGE_IN_REPO"))
     print("CIRRUS_WORKING_DIR", environ.get("CIRRUS_WORKING_DIR"))
     return [
-        linux_task(),
-        windows_task()
+        use_deep_clone(linux_task(), before="test_script"),
+        use_deep_clone(windows_task(), before="install_script")
     ]
 
 
@@ -30,7 +30,6 @@ def linux_task():
                 "apt-get install -y git",
                 "python -m pip install -U pip setuptools setuptools-scm"
             ),
-            deep_clone_script(),
             _test_script(),
         ]
     )
@@ -49,7 +48,6 @@ def windows_task():
         instructions=[
             _install_windows_tools()
         ] + _windows_workarounds() + [
-            deep_clone_script(os="windows"),
             script(
                 "install",
                 "python -m ensurepip",
