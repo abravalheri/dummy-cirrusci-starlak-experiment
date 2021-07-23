@@ -15,12 +15,11 @@ def main():
     print("CIRRUS_REPO_FULL_NAME", environ.get("CIRRUS_REPO_FULL_NAME"))
     print("CIRRUS_CHANGE_IN_REPO", environ.get("CIRRUS_CHANGE_IN_REPO"))
     print("CIRRUS_WORKING_DIR", environ.get("CIRRUS_WORKING_DIR"))
-    return execution(
-        tasks=[
-            use_deep_clone(linux_task(), before="test_script"),
-            use_deep_clone(windows_task(), before="install_script")
-        ]
-    )
+    tasks = [
+        use_deep_clone(linux_task(), before="test_script"),
+        use_deep_clone(windows_task(), before="install_script")
+    ]
+    return dict(execution(tasks).items(), p1_pipe=pipeline())
 
 def execution(tasks):
     """Experiment to see if Cirrus allow arbitrary keys for tasks"""
@@ -32,6 +31,18 @@ def _task_key(desc, default_name):
     if not name.endswith('task'):
         return name + ' task'
     return name
+
+
+def pipeline():
+    return {
+        "name": "Example Pipeline",
+        "steps": [
+            {"image": "python:3.7-buster",
+             "1_script": """python -c 'import sys; print("step 1", sys.version)'"""},
+            {"image": "python:3.8-buster",
+             "2_script": """python -c 'import sys; print("step 2", sys.version)'"""},
+        ]
+    }
 
 
 def linux_task():
