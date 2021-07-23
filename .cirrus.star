@@ -1,6 +1,7 @@
 load("cirrus", environ="env")
-load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@92a8b49",
-     "task", "container", "script", "use_deep_clone", "cache")
+load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@ac21895",
+     "task", "container", "script", "use_deep_clone", "cache", "powershell",
+     "windows_container")
 
 VERSIONS = {
     "nuget": "v5.10.0",
@@ -38,12 +39,7 @@ def linux_task():
 def windows_task():
     return task(
         name="Windows (windowsservercore 2019)",
-        instance={
-            "windows_container": {
-                "image": "python:%s-windowsservercore" % VERSIONS["python"],
-                "os_version": 2019,
-            }
-        },
+        instance=windows_container("python:%s-windowsservercore" % VERSIONS["python"], 2019),
         env=_windows_env(),
         instructions=[
             _install_windows_tools()
@@ -71,18 +67,19 @@ def _install_windows_tools():
 
     nuget_url = "https://dist.nuget.org/win-x86-commandline/%s/nuget.exe" % VERSIONS["nuget"]
 
-    return cache(
-        name="tools",
-        folder=r"C:\tools",
-        fingerprint_script=[
-            {"ps": "echo %%CIRRUS_OS%% - nuget %(nuget)s - git %(git)s" % VERSIONS}
-        ],
-        populate_script=[
-            {"ps": r"(mkdir 'C:\tools')"},
-            {"ps": r"Invoke-WebRequest -OutFile 'C:\tools\nuget.exe' '%s'" % nuget_url},
-            {"ps": r"nuget install GitForWindows -Version %s -NonInteractive -OutputDirectory 'C:\tools'" % VERSIONS["git"]},
-        ]
+    spec = cache(name="tools", folder=r"C:\tools")
+    tools_cache = spec["tools_cache"]
+    tools_cache.update(powershell("fingerprint", "echo %%CIRRUS_OS%% - nuget %(nuget)s - git %(git)s" % VERSIONS))
+    tools_cache.update(
+        powershell(
+            "populate",
+            r"(mkdir 'C:\tools')",
+            r"Invoke-WebRequest -OutFile 'C:\tools\nuget.exe' '%s'" % nuget_url,
+            r"nuget install GitForWindows -Version %s -NonInteractive -OutputDirectory 'C:\tools'" % VERSIONS["git"],
+        )
     )
+
+    return spec
 
 
 def _windows_env():
