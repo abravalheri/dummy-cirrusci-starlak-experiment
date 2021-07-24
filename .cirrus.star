@@ -1,5 +1,5 @@
 load("cirrus", environ="env")
-load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@ac21895",
+load("github.com/abravalheri/cirrus-starlak-helpers/lib.star@98bef52",
      "task", "container", "script", "use_deep_clone", "cache", "powershell",
      "windows_container")
 
@@ -88,7 +88,6 @@ def _test_script():
 
 
 def _install_windows_tools():
-
     nuget_url = "https://dist.nuget.org/win-x86-commandline/%s/nuget.exe" % VERSIONS["nuget"]
 
     spec = cache(name="tools", folder=r"C:\tools")
