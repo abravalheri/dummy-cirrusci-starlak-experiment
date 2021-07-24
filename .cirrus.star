@@ -51,7 +51,7 @@ def linux_task():
 
 def windows_task():
     return task(
-        name="Windows (windowsservercore:2019)",
+        name="Windows (windowsservercore: 2019)",
         instance=windows_container("python:%s-windowsservercore" % VERSIONS["python"], 2019),
         env=_windows_env(),
         instructions=[
