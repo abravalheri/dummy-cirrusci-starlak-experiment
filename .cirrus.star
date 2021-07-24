@@ -28,10 +28,7 @@ def execution(tasks):
 
 
 def _task_key(desc, default_name):
-    name = desc.get('name', str(default_name))
-    if not name.endswith('task'):
-        return name + ' task'
-    return name
+    return desc.get('name', str(default_name))
 
 
 def linux_task():
