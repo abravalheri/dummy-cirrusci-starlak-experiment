@@ -29,8 +29,8 @@ def execution(tasks):
 
 def _task_key(desc, default_name):
     name = desc.get('name', str(default_name))
-    if not name.endswith('_task'):
-        return name + '_task'
+    if not name.endswith('task'):
+        return name + ' task'
     return name
 
 
