@@ -15,10 +15,23 @@ def main():
     print("CIRRUS_REPO_FULL_NAME", environ.get("CIRRUS_REPO_FULL_NAME"))
     print("CIRRUS_CHANGE_IN_REPO", environ.get("CIRRUS_CHANGE_IN_REPO"))
     print("CIRRUS_WORKING_DIR", environ.get("CIRRUS_WORKING_DIR"))
-    return [
-        use_deep_clone(linux_task(), before="test_script"),
-        use_deep_clone(windows_task(), before="install_script")
-    ]
+    return execution(
+        tasks=[
+            use_deep_clone(linux_task(), before="test_script"),
+            use_deep_clone(windows_task(), before="install_script")
+        ]
+    )
+
+def execution(tasks):
+    """Experiment to see if Cirrus allow arbitrary keys for tasks"""
+    return {_task_key(t, i): t for i, t in enumerate(tasks)}
+
+
+def _task_key(desc, default_name):
+    name = desc.get('name', str(default_name))
+    if not name.endswith('_task'):
+        return name + '_task'
+    return name
 
 
 def linux_task():
@@ -38,7 +51,7 @@ def linux_task():
 
 def windows_task():
     return task(
-        name="Windows (windowsservercore 2019)",
+        name="Windows (windowsservercore:2019)",
         instance=windows_container("python:%s-windowsservercore" % VERSIONS["python"], 2019),
         env=_windows_env(),
         instructions=[
