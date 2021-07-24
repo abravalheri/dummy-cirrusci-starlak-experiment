@@ -19,7 +19,11 @@ def main():
         use_deep_clone(linux_task(), before="test_script"),
         use_deep_clone(windows_task(), before="install_script")
     ]
-    return dict(execution(tasks).items(), p1_pipe=pipeline())
+    return dict(
+        execution(tasks).items(),
+        p1_pipe=pipeline(),
+        other_pipe=other_pipe()
+    )
 
 def execution(tasks):
     """Experiment to see if Cirrus allow arbitrary keys for tasks"""
@@ -41,6 +45,18 @@ def pipeline():
              "1_script": """python -c 'import sys; print("step 1", sys.version)'"""},
             {"image": "python:3.8-buster",
              "2_script": """python -c 'import sys; print("step 2", sys.version)'"""},
+        ]
+    }
+
+
+def other_pipe():
+    return {
+        "name": "Example Pipeline",
+        "steps": [
+            {"image": "python:3.6-buster",
+             "1_script": """python -c 'import sys; print("other step 1", sys.version)'"""},
+            {"image": "python:3.9-buster",
+             "2_script": """python -c 'import sys; print("other step 2", sys.version)'"""},
         ]
     }
 
